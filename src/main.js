@@ -23,5 +23,5 @@ Vue.config.productionTip = process.env.NODE_ENV === 'production';
 window.fm = new Vue({
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#fm');

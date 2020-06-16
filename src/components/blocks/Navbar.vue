@@ -3,7 +3,7 @@
         <div class="row justify-content-between">
             <div class="col-auto">
                 <div class="btn-group" role="group">
-                  <v-btn
+                    <v-btn
                       fab
                       text
                       small

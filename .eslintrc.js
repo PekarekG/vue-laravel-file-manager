@@ -28,6 +28,7 @@ module.exports = {
       }
     ],
     'max-len': 'off',
+    "linebreak-style": 0,
   },
   parserOptions: {
     parser: 'babel-eslint',
