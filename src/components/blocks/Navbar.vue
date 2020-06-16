@@ -15,7 +15,7 @@
                             v-on:click="historyForward()">
                         <i class="fas fa-step-forward"></i>
                     </button>
-                    <button type="button" class="btn btn-secondary test"
+                    <button type="button" class="btn btn-secondary test2"
                             v-on:click="refreshAll()"
                             v-bind:title="lang.btn.refresh">
                         <i class="fas fa-sync-alt"></i>
