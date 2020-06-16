@@ -4,8 +4,11 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 // store
 import fm from './store';
+
 // App
 import App from './FileManager.vue';
+
+import vuetify from './plugins/vuetify';
 
 Vue.use(Vuex);
 
@@ -19,5 +22,6 @@ Vue.config.productionTip = process.env.NODE_ENV === 'production';
 
 window.fm = new Vue({
   store,
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#fm');

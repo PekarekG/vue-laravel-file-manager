@@ -3,6 +3,17 @@
         <div class="row justify-content-between">
             <div class="col-auto">
                 <div class="btn-group" role="group">
+                  <v-btn
+                      fab
+                      text
+                      small
+                      depressed
+                      color="primary"
+                      v-on:click="refreshAll()"
+                      v-bind:title="lang.btn.refresh"
+                    >
+                      <v-icon dark>mdi-refresh</v-icon>
+                    </v-btn>
                     <button type="button" class="btn btn-secondary"
                             v-bind:disabled="backDisabled"
                             v-bind:title="lang.btn.back"
@@ -15,7 +26,7 @@
                             v-on:click="historyForward()">
                         <i class="fas fa-step-forward"></i>
                     </button>
-                    <button type="button" class="btn btn-secondary test2"
+                    <button type="button" class="btn btn-secondary"
                             v-on:click="refreshAll()"
                             v-bind:title="lang.btn.refresh">
                         <i class="fas fa-sync-alt"></i>

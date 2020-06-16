@@ -1,22 +1,16 @@
 {
   "name": "laravel-file-manager",
   "version": "2.4.14",
-  "description": "File manager for Laravel",
-  "keywords": [
-    "laravel",
-    "file",
-    "manager"
-  ],
-  "author": "Aleksandr Manekin <alexusmai@gmail.com>",
   "private": false,
-  "license": "MIT",
-  "main": "src/init.js",
+  "description": "File manager for Laravel",
+  "author": "Aleksandr Manekin <alexusmai@gmail.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
   },
+  "main": "src/init.js",
   "dependencies": {
     "axios": "^0.18.0",
     "codemirror": "^5.41.0",
@@ -24,6 +18,7 @@
     "plyr": "^3.4.7",
     "vue": "^2.5.17",
     "vue-codemirror": "^4.0.5",
+    "vuetify": "^2.2.11",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -37,7 +32,16 @@
     "babel-jest": "^23.0.1",
     "babel-polyfill": "^6.26.0",
     "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.17"
-  }
+    "sass": "^1.19.0",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-vuetify": "~2.0.5",
+    "vue-template-compiler": "^2.5.17",
+    "vuetify-loader": "^1.3.0"
+  },
+  "keywords": [
+    "laravel",
+    "file",
+    "manager"
+  ],
+  "license": "MIT"
 }

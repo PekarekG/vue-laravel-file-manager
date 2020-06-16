@@ -1,8 +1,10 @@
 module.exports = {
-  configureWebpack: {
-    // No need for splitting
-    optimization: {
-      splitChunks: false
+  "configureWebpack": {
+    "optimization": {
+      "splitChunks": false
     }
-  }
-};
+  },
+  "transpileDependencies": [
+    "vuetify"
+  ]
+}
