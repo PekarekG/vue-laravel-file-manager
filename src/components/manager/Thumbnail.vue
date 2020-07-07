@@ -6,30 +6,28 @@
     height="160"
     transition="fade-transition"
   >
-    <v-icon class="fm-item-icon" v-if="!src">mdi-file-image-outline</v-icon>
-    <!-- <v-img
+    <v-icon class="fm-item-icon d-flex self-center h-full" v-if="!src"
+      >mdi-file-image-outline</v-icon
+    >
+    <v-img
       v-else
       v-bind:src="src"
       v-bind:alt="file.filename"
       height="160"
-      contain
-    > -->
-    <!-- <template v-slot:placeholder>
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <v-progress-circular indeterminate color="grey"></v-progress-circular>
-            </v-row>
-      </template>-->
-    <!-- </v-img> -->
-    <img
+      width="100%"
+    >
+      <template v-slot:placeholder>
+        <v-row class="fill-height ma-0" align="center" justify="center">
+          <v-progress-circular indeterminate color="grey"></v-progress-circular>
+        </v-row>
+      </template>
+    </v-img>
+    <!-- <img
       v-else
       v-bind:src="src"
       v-bind:alt="file.filename"
       class="img-thumbnail"
-    />
+    /> -->
   </v-lazy>
 </template>
 

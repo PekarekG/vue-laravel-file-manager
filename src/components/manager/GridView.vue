@@ -30,7 +30,7 @@
             transition="fade-transition"
           >
             <v-card
-              class="fm-grid-item unselectable"
+              class="fm-grid-item unselectable rounded-lg overflow-hidden"
               v-bind:title="directory.basename"
               v-bind:class="{
                 active: checkSelect('directories', directory.path)
@@ -65,16 +65,17 @@
         </v-col>
 
         <v-col
-          cols="12"
-          sm="6"
-          md="4"
-          xl="3"
+          class="d-flex child-flex"
+          cols="2"
+          sm="2"
+          md="2"
+          xl="1"
           v-for="(file, index) in files"
           v-bind:key="`f-${index}`"
         >
-          <v-lazy :options="{ hreshold: 0.5 }" transition="fade-transition">
+          <v-lazy :options="{ threshold: 0.5 }" transition="fade-transition">
             <v-card
-              class="fm-grid-item unselectable"
+              class="fm-grid-item unselectable h-full rounded-lg overflow-hidden"
               v-bind:title="file.basename"
               v-bind:class="{ active: checkSelect('files', file.path) }"
               v-on:click="selectItem('files', file.path, $event)"
@@ -82,8 +83,10 @@
               v-on:contextmenu.prevent="contextMenu(file, $event)"
               outlined
             >
-              <div class="text-center">
-                <v-icon class="fm-item-icon" v-if="acl && file.acl === 0"
+              <div class="text-center h-full">
+                <v-icon
+                  class="fm-item-icon d-flex self-center h-full"
+                  v-if="acl && file.acl === 0"
                   >mdi-lock-open-outline</v-icon
                 >
                 <thumbnail
@@ -92,11 +95,11 @@
                   v-bind:file="file"
                 >
                 </thumbnail>
-                <v-icon class="fm-item-icon text-center" v-else>{{
+                <v-icon class="fm-item-icon d-flex self-center h-full" v-else>{{
                   extensionToIcon(file.extension)
                 }}</v-icon>
               </div>
-              <v-list-item>
+              <!-- <v-list-item>
                 <v-list-item-avatar>
                   <v-icon v-if="acl && file.acl === 0"
                     >mdi-lock-open-outline</v-icon
@@ -111,10 +114,46 @@
                     bytesToHuman(file.size)
                   }}</v-list-item-subtitle>
                 </v-list-item-content>
-              </v-list-item>
+              </v-list-item> -->
             </v-card>
           </v-lazy>
         </v-col>
+
+        <!-- <v-col
+          class="d-flex child-flex"
+          cols="2"
+          sm="2"
+          md="2"
+          xl="1"
+          v-for="(file, index) in files"
+          v-bind:key="`f-${index}`"
+        >
+          <v-lazy :options="{ threshold: 0.5 }" transition="fade-transition">
+            <v-card
+              class="fm-grid-item unselectable rounded-lg overflow-hidden"
+              v-bind:title="file.basename"
+              v-bind:class="{ active: checkSelect('files', file.path) }"
+              v-on:click="selectItem('files', file.path, $event)"
+              v-on:dblclick="selectAction(file.path, file.extension)"
+              v-on:contextmenu.prevent="contextMenu(file, $event)"
+            >
+              <div class="m-auto">
+                <v-icon class="fm-item-icon" v-if="acl && file.acl === 0"
+                  >mdi-lock-open-outline</v-icon
+                >
+                <thumbnail
+                  v-else-if="thisImage(file.extension)"
+                  v-bind:disk="disk"
+                  v-bind:file="file"
+                >
+                </thumbnail>
+                <v-icon class="fm-item-icon m-auto" v-else>{{
+                  extensionToIcon(file.extension)
+                }}</v-icon>
+              </div>
+            </v-card>
+          </v-lazy>
+        </v-col> -->
       </v-row>
     </v-container>
   </div>
@@ -177,7 +216,7 @@ export default {
   /* padding-top: 1rem; */
 
   .fm-item-icon {
-    font-size: 10rem;
+    font-size: 4rem;
   }
 
   .fm-grid-item {
@@ -189,39 +228,5 @@ export default {
       background-color: #f4f6fa;
     }
   }
-
-  /* .fm-grid-item {
-            position: relative;
-            width: 125px;
-            padding: 0.4rem;
-            margin-bottom: 1rem;
-            margin-right: 1rem;
-            border-radius: 5px;
-
-            &.active {
-                background-color: #c2e5eb;
-                box-shadow: 3px 2px 5px gray;
-            }
-
-            &:not(.active):hover {
-                background-color: #f8f9fa;
-                box-shadow: 3px 2px 5px gray;
-            }
-
-            .fm-item-icon{
-                cursor: pointer;
-            }
-
-            .fm-item-icon > i,
-            .fm-item-icon > figure > i {
-                color: #6d757d;
-            }
-
-            .fm-item-info {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-        } */
 }
 </style>
