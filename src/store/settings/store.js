@@ -17,6 +17,7 @@ import it from './../../lang/it';
 import tr from './../../lang/tr';
 import fr from './../../lang/fr';
 import pt_BR from './../../lang/pt_BR';
+import hu from './../../lang/hu';
 
 export default {
   namespaced: true,
@@ -61,6 +62,7 @@ export default {
         tr: Object.freeze(tr),
         fr: Object.freeze(fr),
         'pt-BR': Object.freeze(pt_BR),
+        hu: Object.freeze(hu),
       },
 
       // show or hide hidden files
@@ -71,66 +73,81 @@ export default {
         [
           {
             name: 'open',
-            icon: 'far fa-folder-open',
+            // icon: 'far fa-folder-open',
+            icon: 'mdi-folder-open-outline',
           },
           {
             name: 'audioPlay',
-            icon: 'fas fa-play',
+            // icon: 'fas fa-play',
+            icon: 'mdi-play-outline',
           },
           {
             name: 'videoPlay',
-            icon: 'fas fa-play',
+            // icon: 'fas fa-play',
+            icon: 'mdi-play-outline',
           },
           {
             name: 'view',
-            icon: 'fas fa-eye',
+            // icon: 'fas fa-eye',
+            icon: 'mdi-eye-outline',
           },
           {
             name: 'edit',
-            icon: 'fas fa-file-signature',
+            // icon: 'fas fa-file-signature',
+            icon: 'mdi-file-document-edit-outline',
           },
           {
             name: 'select',
-            icon: 'fas fa-check',
+            // icon: 'fas fa-check',
+            icon: 'mdi-check-outline',
           },
           {
             name: 'download',
-            icon: 'fas fa-download',
+            // icon: 'fas fa-download',
+            icon: 'mdi-download-outline',
           },
         ], [
           {
             name: 'copy',
-            icon: 'far fa-copy',
+            // icon: 'far fa-copy',
+            icon: 'mdi-content-copy',
           },
           {
             name: 'cut',
-            icon: 'fas fa-cut',
+            // icon: 'fas fa-cut',
+            icon: 'mdi-content-cut',
           },
           {
             name: 'rename',
-            icon: 'far fa-edit',
+            // icon: 'far fa-edit',
+            icon: 'mdi-pencil-outline',
           },
           {
             name: 'paste',
-            icon: 'far fa-clipboard',
+            // icon: 'far fa-clipboard',
+            icon: 'mdi-content-paste',
           },
           {
             name: 'zip',
-            icon: 'far fa-file-archive',
+            // icon: 'far fa-file-archive',
+            icon: 'mdi-archive-arrow-down-outline',
           },
           {
             name: 'unzip',
-            icon: 'far fa-file-archive',
+            // icon: 'far fa-file-archive',
+            icon: 'mdi-archive-arrow-up-outline',
           },
         ], [
           {
             name: 'delete',
-            icon: 'far fa-trash-alt text-danger',
+            // icon: 'far fa-trash-alt text-danger',
+            icon: 'mdi-delete-outline',
           },
         ], [
           {
             name: 'properties',
-            icon: 'far fa-list-alt',
+            // icon: 'far fa-list-alt',
+            icon: 'mdi-format-list-bulleted',
           },
         ],
       ],

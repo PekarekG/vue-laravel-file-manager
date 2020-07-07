@@ -1,38 +1,69 @@
 <template>
-    <div class="modal-content fm-modal-errors">
-        <div class="modal-header">
-            <h5 class="modal-title">{{ lang.modal.status.title }}</h5>
-            <button type="button" class="close" aria-label="Close" v-on:click="hideModal">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div v-if="errors.length">
-                <ul class="list-unstyled">
-                    <li v-for="(item, index) in errors" v-bind:key="index">
-                        {{ item.status }} - {{ item.message }}
-                    </li>
-                </ul>
-            </div>
-            <div v-else>
-                <span>{{ lang.modal.status.noErrors }}</span>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-danger"
-                    v-bind:disabled="!errors.length"
-                    v-on:click="clearErrors">{{ lang.btn.clear }}</button>
-            <button class="btn btn-light" v-on:click="hideModal">{{ lang.btn.cancel }}</button>
-        </div>
-    </div>
+  <v-card class="modal-content fm-modal-errors">
+    <v-card-title
+      class="d-flex flex-row justify-content-between align-center py-3"
+    >
+      <h5 class="h5 mb-0">{{ lang.modal.status.title }}</h5>
+      <v-spacer></v-spacer>
+      <v-tooltip left attach=".modal-content">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon small aria-label="Close" v-on:click="hideModal">
+            <v-icon aria-hidden="true" v-bind="attrs" v-on="on"
+              >mdi-close</v-icon
+            >
+          </v-btn>
+        </template>
+        <span>Bezárás</span>
+      </v-tooltip>
+    </v-card-title>
+    <v-divider class="m-0"></v-divider>
+    <v-card-text class="py-0">
+      <v-list v-if="errors.length">
+        <v-list-item
+          class="px-0"
+          v-for="(item, index) in errors"
+          v-bind:key="index"
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              >{{ item.status }} - {{ item.message }}</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-item>
+          <v-list-item-content>
+            {{ lang.modal.status.noErrors }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+    <v-divider class="m-0"></v-divider>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        depressed
+        v-bind:disabled="!errors.length"
+        v-on:click="clearErrors"
+        dark
+        color="secondary"
+      >
+        {{ lang.btn.clear }}
+      </v-btn>
+      <v-btn text v-on:click="hideModal">
+        {{ lang.btn.cancel }}
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
-import modal from './../mixins/modal';
-import translate from './../../../mixins/translate';
+import modal from "./../mixins/modal";
+import translate from "./../../../mixins/translate";
 
 export default {
-  name: 'Status',
+  name: "Status",
   mixins: [modal, translate],
   computed: {
     /**
@@ -41,15 +72,15 @@ export default {
      */
     errors() {
       return this.$store.state.fm.messages.errors;
-    },
+    }
   },
   methods: {
     /**
      * Clear all errors
      */
     clearErrors() {
-      this.$store.commit('fm/messages/clearErrors');
-    },
-  },
+      this.$store.commit("fm/messages/clearErrors");
+    }
+  }
 };
 </script>

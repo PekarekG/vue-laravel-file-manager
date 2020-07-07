@@ -1,42 +1,55 @@
 <template>
-    <div ref="contextMenu"
-         v-if="menuVisible"
-         v-bind:style="menuStyle"
-         v-on:blur="closeMenu"
-         class="fm-context-menu"
-         tabindex="-1">
-        <ul v-for="(group, index) in menu"
-            v-bind:key="`g-${index}`"
-            class="list-unstyled">
-            <li v-for="(item, index) in group"
-                v-bind:key="`i-${index}`"
-                v-if="showMenuItem(item.name)"
-                v-on:click="menuAction(item.name)">
-                <i class="fa-fw" v-bind:class="item.icon"></i>
-                {{ lang.contextMenu[item.name] }}
-            </li>
-        </ul>
-    </div>
+  <div
+    ref="contextMenu"
+    v-if="menuVisible"
+    v-bind:style="menuStyle"
+    v-on:blur="closeMenu"
+    v-click-outside="onClickOutside"
+    class="fm-context-menu rounded-lg elevation-4"
+  >
+    <v-list dense class="rounded-lg">
+      <v-list-item-group
+        v-for="(group, index) in menu"
+        v-bind:key="`g-${index}`"
+      >
+        <v-list-item
+          v-for="(item, index) in group"
+          v-bind:key="`i-${index}`"
+          v-if="showMenuItem(item.name)"
+          v-on:click="menuAction(item.name)"
+        >
+          <v-list-item-icon class="mr-2">
+            <v-icon small>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{
+              lang.contextMenu[item.name]
+            }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+  </div>
 </template>
 
 <script>
 /* eslint-disable no-param-reassign */
-import EventBus from './../../eventBus';
-import translate from '../../mixins/translate';
-import contextMenu from './mixins/contextMenu';
-import contextMenuRules from './mixins/contextMenuRules';
-import contextMenuActions from './mixins/contextMenuActions';
+import EventBus from "./../../eventBus";
+import translate from "../../mixins/translate";
+import contextMenu from "./mixins/contextMenu";
+import contextMenuRules from "./mixins/contextMenuRules";
+import contextMenuActions from "./mixins/contextMenuActions";
 
 export default {
-  name: 'ContextMenu',
+  name: "ContextMenu",
   mixins: [translate, contextMenu, contextMenuRules, contextMenuActions],
   data() {
     return {
       menuVisible: false,
       menuStyle: {
         top: 0,
-        left: 0,
-      },
+        left: 0
+      }
     };
   },
   mounted() {
@@ -44,7 +57,7 @@ export default {
      * Listen events
      * 'contextMenu'
      */
-    EventBus.$on('contextMenu', event => this.showMenu(event));
+    EventBus.$on("contextMenu", event => this.showMenu(event));
   },
   computed: {
     /**
@@ -53,7 +66,7 @@ export default {
      */
     menu() {
       return this.$store.state.fm.settings.contextMenu;
-    },
+    }
   },
   methods: {
     /**
@@ -94,8 +107,10 @@ export default {
       let menuX = left - elX;
 
       // calculate max X and Y coordinates
-      const maxY = elY + (el.offsetHeight - this.$refs.contextMenu.offsetHeight - 25);
-      const maxX = elX + (el.offsetWidth - this.$refs.contextMenu.offsetWidth - 25);
+      const maxY =
+        elY + (el.offsetHeight - this.$refs.contextMenu.offsetHeight - 25);
+      const maxX =
+        elX + (el.offsetWidth - this.$refs.contextMenu.offsetWidth - 25);
 
       if (top > maxY) menuY = maxY - elY;
       if (left > maxX) menuX = maxX - elX;
@@ -136,37 +151,17 @@ export default {
       // close context menu
       this.closeMenu();
     },
-  },
+
+    onClickOutside() {
+      this.menuVisible = false;
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-    .fm-context-menu {
-        position: absolute;
-        z-index: 9997;
-        background-color: white;
-        box-shadow: 3px 2px 5px gray;
-        border-radius: 5px;
-
-        .list-unstyled {
-            margin-bottom: 0;
-            border-bottom: 1px solid rgba(0,0,0,.125);
-        }
-
-        ul > li {
-            padding: 0.4rem 1rem;
-        }
-
-        ul > li:not(.disabled) {
-            cursor: pointer;
-
-            &:hover {
-                background-color: #f8f9fa;
-            }
-
-            i {
-                padding-right: 2rem;
-            }
-        }
-    }
+.fm-context-menu {
+  position: absolute;
+  z-index: 9997;
+}
 </style>

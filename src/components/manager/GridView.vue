@@ -1,72 +1,142 @@
 <template>
-    <div class="fm-grid">
-        <div class="d-flex align-content-start flex-wrap">
-            <div v-if="!isRootPath" v-on:click="levelUp" class="fm-grid-item text-center" >
-                <div class="fm-item-icon">
-                    <i class="fas fa-level-up-alt fa-5x pb-2"></i>
-                </div>
-                <div class="fm-item-info"><strong>..</strong></div>
-            </div>
+  <div class="fm-grid">
+    <v-container fluid class="d-flex flex-column px-4 py-0">
+      <v-row class="d-none" v-if="!isRootPath" v-on:click="levelUp">
+        <v-col class="pt-0">
+          <v-btn text small>
+            <v-icon left>mdi-subdirectory-arrow-left</v-icon>
+            <span>[...]</span>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-            <div class="fm-grid-item text-center unselectable"
-                 v-for="(directory, index) in directories"
-                 v-bind:key="`d-${index}`"
-                 v-bind:title="directory.basename"
-                 v-bind:class="{'active': checkSelect('directories', directory.path)}"
-                 v-on:click="selectItem('directories', directory.path, $event)"
-                 v-on:dblclick.stop="selectDirectory(directory.path)"
-                 v-on:contextmenu.prevent="contextMenu(directory, $event)">
-                <div class="fm-item-icon">
-                    <i class="fa-5x pb-2"
-                       v-bind:class="(acl && directory.acl === 0) ? 'fas fa-unlock-alt' : 'far fa-folder'"></i>
-                </div>
-                <div class="fm-item-info">{{ directory.basename }}</div>
-            </div>
+      <v-row class="pb-4" v-if="directories.length >= 1">
+        <v-col cols="12">
+          <h2 class="subtitle-2 mb-0">Mappák</h2>
+        </v-col>
 
-            <div class="fm-grid-item text-center unselectable"
-                 v-for="(file, index) in files"
-                 v-bind:key="`f-${index}`"
-                 v-bind:title="file.basename"
-                 v-bind:class="{'active': checkSelect('files', file.path)}"
-                 v-on:click="selectItem('files', file.path, $event)"
-                 v-on:dblclick="selectAction(file.path, file.extension)"
-                 v-on:contextmenu.prevent="contextMenu(file, $event)">
-                <div class="fm-item-icon">
-                    <i v-if="acl && file.acl === 0" class="fas fa-unlock-alt fa-5x pb-2"></i>
-                    <thumbnail v-else-if="thisImage(file.extension)"
-                               v-bind:disk="disk"
-                               v-bind:file="file">
-                    </thumbnail>
-                    <i v-else class="far fa-5x pb-2"
-                       v-bind:class="extensionToIcon(file.extension)"></i>
-                </div>
-                <div class="fm-item-info">
-                    {{ `${file.filename}.${file.extension}` }}
-                    <br>
-                    {{ bytesToHuman(file.size) }}
-                </div>
-            </div>
-        </div>
-    </div>
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          xl="3"
+          v-for="(directory, index) in directories"
+          v-bind:key="`d-${index}`"
+        >
+          <v-lazy
+            :options="{
+              threshold: 0.5
+            }"
+            transition="fade-transition"
+          >
+            <v-card
+              class="fm-grid-item unselectable"
+              v-bind:title="directory.basename"
+              v-bind:class="{
+                active: checkSelect('directories', directory.path)
+              }"
+              v-on:click="selectItem('directories', directory.path, $event)"
+              v-on:dblclick.stop="selectDirectory(directory.path)"
+              v-on:contextmenu.prevent="contextMenu(directory, $event)"
+              outlined
+            >
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon>{{
+                    acl && directory.acl === 0
+                      ? "mdi-lock-open-outline"
+                      : "mdi-folder-outline"
+                  }}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="subtitle-1">{{
+                    directory.basename
+                  }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-lazy>
+        </v-col>
+      </v-row>
+
+      <v-row class="pb-4" v-if="files.length >= 1">
+        <v-col cols="12">
+          <h2 class="subtitle-2 mb-0">Fájlok</h2>
+        </v-col>
+
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          xl="3"
+          v-for="(file, index) in files"
+          v-bind:key="`f-${index}`"
+        >
+          <v-lazy :options="{ hreshold: 0.5 }" transition="fade-transition">
+            <v-card
+              class="fm-grid-item unselectable"
+              v-bind:title="file.basename"
+              v-bind:class="{ active: checkSelect('files', file.path) }"
+              v-on:click="selectItem('files', file.path, $event)"
+              v-on:dblclick="selectAction(file.path, file.extension)"
+              v-on:contextmenu.prevent="contextMenu(file, $event)"
+              outlined
+            >
+              <div class="text-center">
+                <v-icon class="fm-item-icon" v-if="acl && file.acl === 0"
+                  >mdi-lock-open-outline</v-icon
+                >
+                <thumbnail
+                  v-else-if="thisImage(file.extension)"
+                  v-bind:disk="disk"
+                  v-bind:file="file"
+                >
+                </thumbnail>
+                <v-icon class="fm-item-icon text-center" v-else>{{
+                  extensionToIcon(file.extension)
+                }}</v-icon>
+              </div>
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon v-if="acl && file.acl === 0"
+                    >mdi-lock-open-outline</v-icon
+                  >
+                  <v-icon v-else>{{ extensionToIcon(file.extension) }}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content class="fm-item-info">
+                  <v-list-item-title class="subtitle-1">{{
+                    `${file.filename}.${file.extension}`
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle class="subtitle-2">{{
+                    bytesToHuman(file.size)
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-lazy>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import translate from './../../mixins/translate';
-import helper from './../../mixins/helper';
-import managerHelper from './mixins/manager';
-import Thumbnail from './Thumbnail.vue';
+import translate from "./../../mixins/translate";
+import helper from "./../../mixins/helper";
+import managerHelper from "./mixins/manager";
+import Thumbnail from "./Thumbnail.vue";
 
 export default {
-  name: 'grid-view',
+  name: "grid-view",
   components: { Thumbnail },
   mixins: [translate, helper, managerHelper],
   data() {
     return {
-      disk: '',
+      disk: ""
     };
   },
   props: {
-    manager: { type: String, required: true },
+    manager: { type: String, required: true }
   },
   mounted() {
     this.disk = this.selectedDisk;
@@ -84,7 +154,7 @@ export default {
      */
     imageExtensions() {
       return this.$store.state.fm.settings.imageExtensions;
-    },
+    }
   },
   methods: {
     /**
@@ -97,16 +167,30 @@ export default {
       if (!extension) return false;
 
       return this.imageExtensions.includes(extension.toLowerCase());
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-    .fm-grid {
-        padding-top: 1rem;
+.fm-grid {
+  /* padding-top: 1rem; */
 
-        .fm-grid-item {
+  .fm-item-icon {
+    font-size: 10rem;
+  }
+
+  .fm-grid-item {
+    &.active {
+      background-color: #f4f6fa;
+    }
+
+    &:not(.active):hover {
+      background-color: #f4f6fa;
+    }
+  }
+
+  /* .fm-grid-item {
             position: relative;
             width: 125px;
             padding: 0.4rem;
@@ -138,6 +222,6 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
-        }
-    }
+        } */
+}
 </style>

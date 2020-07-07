@@ -1,35 +1,37 @@
 <template>
-    <transition name="fm-modal">
-        <div class="fm-modal" ref="fmModal" v-on:click="hideModal">
-            <div class="modal-dialog"
-                 role="document"
-                 v-bind:class="modalSize"
-                 v-on:click.stop>
-                <component v-bind:is="modalName"></component>
-            </div>
-        </div>
-    </transition>
+  <transition name="fm-modal">
+    <div class="fm-modal" ref="fmModal" v-on:click="hideModal">
+      <div
+        class="fm-modal-dialog"
+        role="document"
+        v-bind:class="modalSize"
+        v-on:click.stop
+      >
+        <component v-bind:is="modalName"></component>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-import NewFile from './views/NewFile.vue';
-import NewFolder from './views/NewFolder.vue';
-import Upload from './views/Upload.vue';
-import Delete from './views/Delete.vue';
-import Clipboard from './views/Clipboard.vue';
-import Status from './views/Status.vue';
-import Rename from './views/Rename.vue';
-import Properties from './views/Properties.vue';
-import Preview from './views/Preview.vue';
-import TextEdit from './views/TextEdit.vue';
-import AudioPlayer from './views/AudioPlayer.vue';
-import VideoPlayer from './views/VideoPlayer.vue';
-import Zip from './views/Zip.vue';
-import Unzip from './views/Unzip.vue';
-import About from './views/About.vue';
+import NewFile from "./views/NewFile.vue";
+import NewFolder from "./views/NewFolder.vue";
+import Upload from "./views/Upload.vue";
+import Delete from "./views/Delete.vue";
+import Clipboard from "./views/Clipboard.vue";
+import Status from "./views/Status.vue";
+import Rename from "./views/Rename.vue";
+import Properties from "./views/Properties.vue";
+import Preview from "./views/Preview.vue";
+import TextEdit from "./views/TextEdit.vue";
+import AudioPlayer from "./views/AudioPlayer.vue";
+import VideoPlayer from "./views/VideoPlayer.vue";
+import Zip from "./views/Zip.vue";
+import Unzip from "./views/Unzip.vue";
+import About from "./views/About.vue";
 
 export default {
-  name: 'Modal',
+  name: "Modal",
   components: {
     NewFile,
     NewFolder,
@@ -45,11 +47,14 @@ export default {
     VideoPlayer,
     Zip,
     Unzip,
-    About,
+    About
   },
   mounted() {
     // set height
-    this.$store.commit('fm/modal/setModalBlockHeight', this.$refs.fmModal.offsetHeight);
+    this.$store.commit(
+      "fm/modal/setModalBlockHeight",
+      this.$refs.fmModal.offsetHeight
+    );
   },
   computed: {
     /**
@@ -66,48 +71,100 @@ export default {
      */
     modalSize() {
       return {
-        'modal-xl': this.modalName === 'Preview' || this.modalName === 'TextEdit',
-        'modal-lg': this.modalName === 'VideoPlayer',
-        'modal-sm': false,
+        "modal-xl":
+          this.modalName === "Preview" || this.modalName === "TextEdit",
+        "modal-lg": this.modalName === "VideoPlayer",
+        "modal-sm": false
       };
-    },
+    }
   },
   methods: {
     /**
      * Hide modal window
      */
     hideModal() {
-      this.$store.commit('fm/modal/clearModal');
-    },
-  },
+      this.$store.commit("fm/modal/clearModal");
+    }
+  }
 };
 </script>
 
 <style lang="scss">
+.fm-modal {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  /* transition: opacity .4s ease; */
+  overflow: auto;
 
-    .fm-modal {
-        position: absolute;
-        z-index: 9998;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .35);
-        display: block;
-        transition: opacity .4s ease;
-        overflow: auto;
+  animation: fadeIn 0.4s;
 
-        .modal-xl {
-            max-width: 96%;
-        }
-    }
+  .fm-modal-dialog {
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    animation: scaleIn 0.4s;
+  }
 
-    .fm-modal-enter-active, .fm-modal-leave-active {
-        transition: opacity .5s;
-    }
-    .fm-modal-enter, .fm-modal-leave-to {
-        opacity: 0;
-    }
+  .modal-xl {
+    max-width: 96%;
+  }
+  .v-card__text {
+    height: 600px;
+  }
+}
+
+.fm-modal-enter-active,
+.fm-modal-leave-active {
+  transition: opacity 0.25s;
+
+  .fm-modal-dialog {
+    animation: scaleOut 0.4s;
+  }
+}
+.fm-modal-enter,
+.fm-modal-leave-to {
+  opacity: 0;
+  animation: fadeOut 0.4s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes scaleIn {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.5);
+  }
+}
 </style>

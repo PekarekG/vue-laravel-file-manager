@@ -1,38 +1,59 @@
 <template>
-    <ul class="list-unstyled fm-tree-branch">
-        <li v-for="(directory, index) in subDirectories" v-bind:key="index">
-            <p class="unselectable"
-               v-bind:class="{'selected': isDirectorySelected(directory.path)}"
-               v-on:click="selectDirectory(directory.path)">
-                <i class="far"
-                   v-if="directory.props.hasSubdirectories"
-                   v-on:click.stop="showSubdirectories(
-                        directory.path,
-                        directory.props.showSubdirectories
-                      )"
-                   v-bind:class="[arrowState(index)
-                    ? 'fa-minus-square'
-                    : 'fa-plus-square'
-                   ]"></i>
-                <i class="fas fa-minus fa-xs" v-else></i>
-                {{ directory.basename }}
-            </p>
-
-            <transition name="fade-tree">
-                <branch v-show="arrowState(index)"
-                        v-if="directory.props.hasSubdirectories"
-                        v-bind:parent-id="directory.id">
-                </branch>
-            </transition>
-        </li>
-    </ul>
+  <div class="fm-tree-branch">
+    <div
+      class="item-group"
+      v-for="(directory, index) in subDirectories"
+      v-bind:key="index"
+    >
+      <v-lazy
+        :options="{
+          threshold: 0.5
+        }"
+        transition="fade-transition"
+      >
+        <v-list-item
+          dense
+          class="unselectable"
+          v-bind:class="{ selected: isDirectorySelected(directory.path) }"
+          v-on:click="selectDirectory(directory.path)"
+        >
+          <v-list-item-icon class="ml-2 mr-4">
+            <v-icon
+              v-if="directory.props.hasSubdirectories"
+              v-on:click.stop="
+                showSubdirectories(
+                  directory.path,
+                  directory.props.showSubdirectories
+                )
+              "
+              >{{
+                arrowState(index)
+                  ? "mdi-folder-open-outline"
+                  : "mdi-folder-outline"
+              }}</v-icon
+            >
+            <v-icon v-else>mdi-folder-outline</v-icon>
+          </v-list-item-icon>
+          <span>{{ directory.basename }}</span>
+        </v-list-item>
+      </v-lazy>
+      <transition name="fade-tree">
+        <branch
+          v-show="arrowState(index)"
+          v-if="directory.props.hasSubdirectories"
+          v-bind:parent-id="directory.id"
+        >
+        </branch>
+      </transition>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Branch',
+  name: "Branch",
   props: {
-    parentId: { type: Number, required: true },
+    parentId: { type: Number, required: true }
   },
   computed: {
     /**
@@ -40,8 +61,10 @@ export default {
      * @returns {*}
      */
     subDirectories() {
-      return this.$store.getters['fm/tree/directories'].filter(item => item.parentId === this.parentId);
-    },
+      return this.$store.getters["fm/tree/directories"].filter(
+        item => item.parentId === this.parentId
+      );
+    }
   },
   methods: {
     /**
@@ -70,10 +93,10 @@ export default {
     showSubdirectories(path, showState) {
       if (showState) {
         // hide
-        this.$store.dispatch('fm/tree/hideSubdirectories', path);
+        this.$store.dispatch("fm/tree/hideSubdirectories", path);
       } else {
         // show
-        this.$store.dispatch('fm/tree/showSubdirectories', path);
+        this.$store.dispatch("fm/tree/showSubdirectories", path);
       }
     },
 
@@ -84,15 +107,18 @@ export default {
     selectDirectory(path) {
       // only if this path not selected
       if (!this.isDirectorySelected(path)) {
-        this.$store.dispatch('fm/left/selectDirectory', { path, history: true });
+        this.$store.dispatch("fm/left/selectDirectory", {
+          path,
+          history: true
+        });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-    .fm-tree-branch {
+/* .fm-tree-branch {
         display: table;
         width: 100%;
         padding-left: 1.4rem;
@@ -117,13 +143,85 @@ export default {
         .far{
             padding-right: 0.5rem;
         }
-    }
+    } */
 
-    .fade-tree-enter-active, .fade-tree-leave-active {
+.fm-tree-branch {
+  .v-list-item {
+    &:hover,
+    &.selected {
+      background-color: #f4f6fa;
+    }
+  }
+  .fm-tree-branch {
+    .v-list-item {
+      padding-left: 2rem;
+      &:hover,
+      &.selected {
+        background-color: #f4f6fa;
+      }
+    }
+    .fm-tree-branch {
+      .v-list-item {
+        padding-left: 3rem;
+        &:hover,
+        &.selected {
+          background-color: #f4f6fa;
+        }
+      }
+      .fm-tree-branch {
+        .v-list-item {
+          padding-left: 4rem;
+          &:hover,
+          &.selected {
+            background-color: #f4f6fa;
+          }
+        }
+        .fm-tree-branch {
+          .v-list-item {
+            padding-left: 5rem;
+            &:hover,
+            &.selected {
+              background-color: #f4f6fa;
+            }
+          }
+          .fm-tree-branch {
+            .v-list-item {
+              padding-left: 6rem;
+              &:hover,
+              &.selected {
+                background-color: #f4f6fa;
+              }
+            }
+            .fm-tree-branch {
+              .v-list-item {
+                padding-left: 7rem;
+                &:hover,
+                &.selected {
+                  background-color: #f4f6fa;
+                }
+              }
+              .fm-tree-branch {
+                .v-list-item {
+                  padding-left: 8rem;
+                  &:hover,
+                  &.selected {
+                    background-color: #f4f6fa;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* .fade-tree-enter-active, .fade-tree-leave-active {
         transition: all .3s ease;
     }
     .fade-tree-enter, .fade-tree-leave-to {
         transform: translateX(20px);
         opacity: 0;
-    }
+    } */
 </style>

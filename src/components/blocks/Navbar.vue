@@ -1,224 +1,303 @@
 <template>
-  <div class="fm-navbar mb-3">
-    <div class="row justify-content-between">
-      <div class="col-auto">
-        <div class="btn-group" role="group"></div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            dark
-            small
-            depressed
-            color="primary"
-            disabled
-            v-if="uploading"
-            v-bind:title="lang.btn.upload"
-          >
-            <v-icon dark>mdi-upload-outline</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            dark
-            small
-            depressed
-            color="primary"
-            v-else
-            v-on:click="showModal('Upload')"
-            v-bind:title="lang.btn.upload"
-          >
-            <v-icon dark>mdi-upload-outline</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-on:click="showModal('NewFile')"
-            v-bind:title="lang.btn.file"
-          >
-            <v-icon dark>mdi-file-outline</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-on:click="showModal('NewFolder')"
-            v-bind:title="lang.btn.folder"
-          >
-            <v-icon dark>mdi-folder-outline</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="!isAnyItemSelected"
-            v-on:click="showModal('Delete')"
-            v-bind:title="lang.btn.delete"
-          >
-            <v-icon dark>mdi-delete-outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="backDisabled"
-            v-bind:title="lang.btn.back"
-            v-on:click="historyBack()"
-          >
-            <v-icon dark>mdi-step-backward</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="forwardDisabled"
-            v-bind:title="lang.btn.forward"
-            v-on:click="historyForward()"
-          >
-            <v-icon dark>mdi-step-forward</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-on:click="refreshAll()"
-            v-bind:title="lang.btn.refresh"
-          >
-            <v-icon dark>mdi-refresh</v-icon>
-          </v-btn>
-        </div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="!isAnyItemSelected"
-            v-bind:title="lang.btn.copy"
-            v-on:click="toClipboard('copy')"
-          >
-            <v-icon dark>mdi-content-copy</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="!isAnyItemSelected"
-            v-bind:title="lang.btn.cut"
-            v-on:click="toClipboard('cut')"
-          >
-            <v-icon dark>mdi-content-cut</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:disabled="!clipboardType"
-            v-bind:title="lang.btn.paste"
-            v-on:click="paste"
-          >
-            <v-icon dark>mdi-content-paste</v-icon>
-          </v-btn>
-        </div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:title="lang.btn.hidden"
-            v-on:click="toggleHidden"
-          >
-            <v-icon dark v-if="hiddenFiles">mdi-eye-off-outline</v-icon>
-            <v-icon dark v-else>mdi-eye-outline</v-icon>
-          </v-btn>
-        </div>
-      </div>
-      <div class="col-auto text-right">
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:class="[viewType === 'table' ? 'active' : '']"
-            v-on:click="selectView('table')"
-            v-bind:title="lang.btn.table"
-          >
-            <v-icon dark>mdi-view-list-outline</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:class="[viewType === 'grid' ? 'active' : '']"
-            v-on:click="selectView('grid')"
-            v-bind:title="lang.btn.grid"
-          >
-            <v-icon dark>mdi-view-grid-outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:title="lang.btn.fullScreen"
-            v-bind:class="{ active: fullScreen }"
-            v-on:click="screenToggle"
-          >
-            <v-icon dark v-if="fullScreen">mdi-fullscreen-exit</v-icon>
-            <v-icon dark v-else>mdi-fullscreen</v-icon>
-          </v-btn>
-        </div>
-        <div class="btn-group" role="group">
-          <v-btn
-            fab
-            text
-            small
-            depressed
-            color="primary"
-            v-bind:title="lang.btn.about"
-            v-on:click="showModal('About')"
-          >
-            <v-icon dark>mdi-help</v-icon>
-          </v-btn>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-container fluid class="fm-navbar px-4 py-0">
+    <v-row>
+      <v-col class="h-14 d-flex items-center py-0" cols="auto">
+        <v-menu offset-y attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              dark
+              small
+              depressed
+              color="secondary"
+              v-on="on"
+              class="mr-4"
+            >
+              <v-icon dark>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item disabled v-if="uploading">
+                <v-list-item-icon class="mr-3">
+                  <v-icon class="opacity-75">mdi-upload-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ lang.btn.upload }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-else v-on:click="showModal('Upload')">
+                <v-list-item-icon class="mr-3">
+                  <v-icon class="opacity-75">mdi-upload-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ lang.btn.upload }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <!-- <v-list-item v-on:click="showModal('NewFile')" v-bind:title="lang.btn.file">
+                <v-list-item-icon class="mr-3">
+                  <v-icon class="opacity-75">mdi-file-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ lang.btn.file }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item> -->
+              <v-list-item v-on:click="showModal('NewFolder')" v-bind:title="lang.btn.folder">
+                <v-list-item-icon class="mr-3">
+                  <v-icon class="opacity-75">mdi-folder-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ lang.btn.folder }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="!isAnyItemSelected"
+              v-on:click="showModal('Delete')"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-delete-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.delete }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="backDisabled"
+              v-on:click="historyBack()"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-step-backward</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.back }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="forwardDisabled"
+              v-on:click="historyForward()"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-step-forward</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.forward }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-on:click="refreshAll()"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-refresh</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.refresh }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="!isAnyItemSelected"
+              v-on:click="toClipboard('copy')"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-content-copy</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.copy }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="!isAnyItemSelected"
+              v-on:click="toClipboard('cut')"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-content-cut</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.cut }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:disabled="!clipboardType"
+              v-on:click="paste"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75">mdi-content-paste</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.paste }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-on:click="toggleHidden"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon dark class="opacity-75" v-if="hiddenFiles">mdi-eye-off-outline</v-icon>
+              <v-icon dark class="opacity-75" v-else>mdi-eye-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.hidden }}</span>
+        </v-tooltip>
+      </v-col class="h-14 py-0">
+      <v-spacer></v-spacer>
+      <v-col class="h-14 d-flex items-center justify-end py-0">
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:class="[viewType === 'table' ? 'active' : '']"
+              v-on:click="selectView('table')"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon class="opacity-75" dark>mdi-view-list-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.table }}</span>
+        </v-tooltip>
+        <v-tooltip bottom attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:class="[viewType === 'grid' ? 'active' : '']"
+              v-on:click="selectView('grid')"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-2"
+            >
+              <v-icon class="opacity-75" dark>mdi-view-grid-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.grid }}</span>
+        </v-tooltip>
+        <v-tooltip left attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-bind:class="{ active: fullScreen }"
+              v-on:click="screenToggle"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon dark class="opacity-75" v-if="fullScreen">mdi-fullscreen-exit</v-icon>
+              <v-icon dark class="opacity-75" v-else>mdi-fullscreen</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.fullScreen }}</span>
+        </v-tooltip>
+        <v-tooltip bottom left attach=".fm-navbar">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              fab
+              text
+              small
+              depressed
+              color="primary"
+              v-on:click="showModal('About')"
+              v-bind="attrs"
+              v-on="on"
+              class="d-none"
+            >
+              <v-icon class="opacity-75" dark>mdi-help</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ lang.btn.about }}</span>
+        </v-tooltip>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import translate from "./../../mixins/translate";
 import EventBus from "./../../eventBus";
+// Components
+import Modal from './../../components/modals/Modal.vue';
 
 export default {
   mixins: [translate],
+  components: {
+    Modal,
+  },
   computed: {
     /**
      * Active manager name
@@ -296,7 +375,7 @@ export default {
      */
     hiddenFiles() {
       return this.$store.state.fm.settings.hiddenFiles;
-    }
+    },
   },
   methods: {
     /**
@@ -409,9 +488,13 @@ export default {
 </script>
 
 <style lang="scss">
-.fm-navbar {
-  .btn-group {
-    margin-right: 0.4rem;
+  .fm-navbar {
+    position: relative;
+    height: 3.5rem;
+    z-index: 1021;
+
   }
-}
+  /* .v-menu__content {
+    left: 36px !important;
+  } */
 </style>

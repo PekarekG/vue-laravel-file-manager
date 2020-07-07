@@ -1,57 +1,86 @@
 <template>
-    <div class="modal-content fm-modal-preview">
-        <div class="modal-header">
-            <h5 class="modal-title w-75 text-truncate">
-                {{ showCropperModule ? lang.modal.cropper.title : lang.modal.preview.title }}
-                <small class="text-muted pl-3">{{ selectedItem.basename }}</small>
-            </h5>
-            <button type="button" class="close" aria-label="Close" v-on:click="hideModal">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body text-center">
-            <template v-if="showCropperModule">
-                <cropper-module v-bind:imgSrc="imgSrc"
-                                v-bind:maxHeight="maxHeight"
-                                v-on:closeCropper="closeCropper"></cropper-module>
-            </template>
-            <transition v-else name="fade" mode="out-in">
-                <i v-if="!imgSrc" class="fas fa-spinner fa-spin fa-5x p-5 text-muted"></i>
-                <img v-else
-                     v-bind:src="imgSrc"
-                     v-bind:alt="selectedItem.basename"
-                     v-bind:style="{'max-height': maxHeight+'px'}">
-            </transition>
-        </div>
-        <div v-if="showFooter" class="d-flex justify-content-between">
-            <span class="d-block">
-                <button class="btn btn-info"
-                        v-bind:title="lang.modal.cropper.title" v-on:click="showCropperModule = true">
-                    <i class="fas fa-crop-alt"></i>
-                </button>
-            </span>
-            <span class="d-block">
-                <button class="btn btn-light" v-on:click="hideModal">{{ lang.btn.cancel }}</button>
-            </span>
-        </div>
-    </div>
+  <v-card class="modal-content fm-modal-preview">
+    <v-card-title
+      class="d-flex flex-row justify-content-between align-center py-3"
+    >
+      <h5 class="h5 mb-0">{{ selectedItem.basename }}</h5>
+      <v-spacer></v-spacer>
+      <v-tooltip left attach=".modal-content">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon small aria-label="Close" v-on:click="hideModal">
+            <v-icon aria-hidden="true" v-bind="attrs" v-on="on"
+              >mdi-close</v-icon
+            >
+          </v-btn>
+        </template>
+        <span>Bezárás</span>
+      </v-tooltip>
+    </v-card-title>
+    <v-divider class="m-0"></v-divider>
+    <v-card-text class="pa-0 d-flex">
+      <template v-if="showCropperModule">
+        <cropper-module
+          v-bind:imgSrc="imgSrc"
+          v-bind:maxHeight="maxHeight"
+          v-on:closeCropper="closeCropper"
+        ></cropper-module>
+      </template>
+      <transition v-else name="fade" mode="out-in">
+        <i
+          v-if="!imgSrc"
+          class="fas fa-spinner fa-spin fa-5x p-5 text-muted"
+        ></i>
+        <img
+          v-else
+          v-bind:src="imgSrc"
+          v-bind:alt="selectedItem.basename"
+          v-bind:style="{ 'max-height': maxHeight + 'px' }"
+          class="m-auto"
+        />
+        />
+      </transition>
+    </v-card-text>
+    <v-divider class="m-0"></v-divider>
+    <v-card-actions v-if="showFooter">
+      <v-tooltip right attach=".modal-content">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind:title="lang.modal.cropper.title"
+            v-on:click="showCropperModule = true"
+            dark
+            v-bind="attrs"
+            v-on="on"
+            color="secondary"
+          >
+            <v-icon>mdi-crop</v-icon>
+          </v-btn>
+        </template>
+        <span>Szerkesztés</span>
+      </v-tooltip>
+      <v-spacer></v-spacer>
+      <v-btn text v-on:click="hideModal">
+        {{ lang.btn.cancel }}
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
-import CropperModule from './../additions/Cropper.vue';
-import modal from './../mixins/modal';
-import translate from './../../../mixins/translate';
-import helper from './../../../mixins/helper';
-import GET from './../../../http/get';
+import CropperModule from "./../additions/Cropper.vue";
+import modal from "./../mixins/modal";
+import translate from "./../../../mixins/translate";
+import helper from "./../../../mixins/helper";
+import GET from "./../../../http/get";
 
 export default {
-  name: 'Preview',
+  name: "Preview",
   mixins: [modal, translate, helper],
   components: { CropperModule },
   data() {
     return {
       showCropperModule: false,
-      imgSrc: '',
+      imgSrc: ""
     };
   },
   created() {
@@ -63,7 +92,7 @@ export default {
      * @return {*}
      */
     auth() {
-      return this.$store.getters['fm/settings/authHeader'];
+      return this.$store.getters["fm/settings/authHeader"];
     },
 
     /**
@@ -71,7 +100,7 @@ export default {
      * @returns {*}
      */
     selectedDisk() {
-      return this.$store.getters['fm/selectedDisk'];
+      return this.$store.getters["fm/selectedDisk"];
     },
 
     /**
@@ -79,7 +108,7 @@ export default {
      * @returns {*}
      */
     selectedItem() {
-      return this.$store.getters['fm/selectedItems'][0];
+      return this.$store.getters["fm/selectedItems"][0];
     },
 
     /**
@@ -87,7 +116,9 @@ export default {
      * @return boolean
      */
     showFooter() {
-      return this.canCrop(this.selectedItem.extension) && !this.showCropperModule;
+      return (
+        this.canCrop(this.selectedItem.extension) && !this.showCropperModule
+      );
     },
 
     /**
@@ -100,7 +131,7 @@ export default {
       }
 
       return 300;
-    },
+    }
   },
   methods: {
     /**
@@ -109,7 +140,9 @@ export default {
      * @returns {boolean}
      */
     canCrop(extension) {
-      return this.$store.state.fm.settings.cropExtensions.includes(extension.toLowerCase());
+      return this.$store.state.fm.settings.cropExtensions.includes(
+        extension.toLowerCase()
+      );
     },
 
     /**
@@ -126,37 +159,43 @@ export default {
     loadImage() {
       // if authorization required
       if (this.auth) {
-        GET.preview(
-          this.selectedDisk,
-          this.selectedItem.path,
-        ).then((response) => {
-          const mimeType = response.headers['content-type'].toLowerCase();
-          const imgBase64 = Buffer.from(response.data, 'binary').toString('base64');
+        GET.preview(this.selectedDisk, this.selectedItem.path).then(
+          response => {
+            const mimeType = response.headers["content-type"].toLowerCase();
+            const imgBase64 = Buffer.from(response.data, "binary").toString(
+              "base64"
+            );
 
-          this.imgSrc = `data:${mimeType};base64,${imgBase64}`;
-        });
+            this.imgSrc = `data:${mimeType};base64,${imgBase64}`;
+          }
+        );
       } else {
-        this.imgSrc = `${this.$store.getters['fm/settings/baseUrl']}preview?disk=${this.selectedDisk}&path=${encodeURIComponent(this.selectedItem.path)}&v=${this.selectedItem.timestamp}`;
+        this.imgSrc = `${
+          this.$store.getters["fm/settings/baseUrl"]
+        }preview?disk=${this.selectedDisk}&path=${encodeURIComponent(
+          this.selectedItem.path
+        )}&v=${this.selectedItem.timestamp}`;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-    .fm-modal-preview {
+.fm-modal-preview {
+  img {
+    max-width: 100%;
+    height: auto;
+    max-height: 100% !important;
+  }
 
-        .modal-body {
-            padding: 0;
+  /* .v-card__text img {
+    max-height: 100% !important;
+  } */
 
-            img {
-                max-width: 100%;
-            }
-        }
-
-        & > .d-flex {
-            padding: 1rem;
-            border-top: 1px solid #e9ecef;
-        }
-    }
+  & > .d-flex {
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+  }
+}
 </style>

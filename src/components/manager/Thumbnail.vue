@@ -1,43 +1,66 @@
 <template>
-    <figure class="fm-thumbnail">
-        <transition name="fade" mode="out-in">
-            <i v-if="!src" class="far fa-file-image fa-5x pb-2"></i>
-            <img v-else
-                 v-bind:src="src"
-                 v-bind:alt="file.filename"
-                 class="img-thumbnail">
-        </transition>
-    </figure>
+  <v-lazy
+    :options="{
+      threshold: 0.5
+    }"
+    height="160"
+    transition="fade-transition"
+  >
+    <v-icon class="fm-item-icon" v-if="!src">mdi-file-image-outline</v-icon>
+    <!-- <v-img
+      v-else
+      v-bind:src="src"
+      v-bind:alt="file.filename"
+      height="160"
+      contain
+    > -->
+    <!-- <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular indeterminate color="grey"></v-progress-circular>
+            </v-row>
+      </template>-->
+    <!-- </v-img> -->
+    <img
+      v-else
+      v-bind:src="src"
+      v-bind:alt="file.filename"
+      class="img-thumbnail"
+    />
+  </v-lazy>
 </template>
 
 <script>
-import GET from './../../http/get';
+import GET from "./../../http/get";
 
 export default {
-  name: 'Thumbnail',
+  name: "Thumbnail",
   data() {
     return {
-      src: '',
+      src: ""
     };
   },
   props: {
     disk: {
       type: String,
-      required: true,
+      required: true
     },
     file: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   watch: {
-    'file.timestamp': 'loadImage',
+    "file.timestamp": "loadImage"
   },
   mounted() {
     if (window.IntersectionObserver) {
       const observer = new IntersectionObserver(
         (entries, obs) => {
-          entries.forEach((entry) => {
+          entries.forEach(entry => {
             if (entry.isIntersecting) {
               this.loadImage();
               obs.unobserve(this.$el);
@@ -46,8 +69,8 @@ export default {
         },
         {
           root: null,
-          threshold: '0.5',
-        },
+          threshold: "0.5"
+        }
       );
 
       // add observer for template
@@ -62,8 +85,8 @@ export default {
      * @return {*}
      */
     auth() {
-      return this.$store.getters['fm/settings/authHeader'];
-    },
+      return this.$store.getters["fm/settings/authHeader"];
+    }
   },
   methods: {
     /**
@@ -72,39 +95,24 @@ export default {
     loadImage() {
       // if authorization required
       if (this.auth) {
-        GET.thumbnail(
-          this.disk,
-          this.file.path,
-        ).then((response) => {
-          const mimeType = response.headers['content-type'].toLowerCase();
-          const imgBase64 = Buffer.from(response.data, 'binary').toString('base64');
+        GET.thumbnail(this.disk, this.file.path).then(response => {
+          const mimeType = response.headers["content-type"].toLowerCase();
+          const imgBase64 = Buffer.from(response.data, "binary").toString(
+            "base64"
+          );
 
           this.src = `data:${mimeType};base64,${imgBase64}`;
         });
       } else {
-        this.src = `${this.$store.getters['fm/settings/baseUrl']}thumbnails?disk=${this.disk}&path=${encodeURIComponent(this.file.path)}&v=${this.file.timestamp}`;
+        this.src = `${
+          this.$store.getters["fm/settings/baseUrl"]
+        }thumbnails?disk=${this.disk}&path=${encodeURIComponent(
+          this.file.path
+        )}&v=${this.file.timestamp}`;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss">
-    .fm-thumbnail {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .img-thumbnail {
-            width: 88px;
-            height: 88px;
-        }
-
-        .fade-enter-active, .fade-leave-active {
-            transition: opacity .3s;
-        }
-        .fade-enter, .fade-leave-to {
-            opacity: 0;
-        }
-    }
-</style>
+<style lang="scss"></style>

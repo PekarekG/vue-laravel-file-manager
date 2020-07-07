@@ -1,0 +1,190 @@
+/**
+ * English translate
+ * @type Object
+ */
+const hu = {
+  btn: {
+    about: 'Termékinformáció',
+    back: 'Vissza',
+    cancel: 'Mégse',
+    clear: 'Alapállapot',
+    copy: 'Másolás',
+    cut: 'Kivágás',
+    delete: 'Törlés',
+    edit: 'Szerkesztés',
+    forward: 'Előre',
+    folder: 'Új mappa',
+    file: 'Új fájl',
+    fullScreen: 'Teljes képernyő',
+    grid: 'Kártya nézet',
+    paste: 'Beillesztés',
+    refresh: 'Frissítés',
+    submit: 'Küldés',
+    table: 'Lista nézet',
+    upload: 'Feltöltés',
+    uploadSelect: 'Fájlok kiválasztása',
+    hidden: 'Rejtett fájlok',
+  },
+  clipboard: {
+    actionType: 'Típus',
+    copy: 'Másolás',
+    cut: 'Kivágás',
+    none: 'Nincs elem kiválasztva',
+    title: 'Vágólap',
+  },
+  contextMenu: {
+    copy: 'Másolás',
+    cut: 'Kivágás',
+    delete: 'Törlés',
+    download: 'Letöltés',
+    info: 'Kiválasztva:',
+    open: 'Megnyitás',
+    paste: 'Beillesztés',
+    properties: 'Tulajdonságok',
+    rename: 'Átnevezés',
+    select: 'Kiválasztás',
+    view: 'Nézet',
+    zip: 'Tömörítés',
+    unzip: 'Kicsomagolás',
+    edit: 'Szerkesztés',
+    audioPlay: 'Lejátszás',
+    videoPlay: 'Lejátszás',
+  },
+  info: {
+    directories: 'mappa',
+    files: 'fájl',
+    selected: 'kiválasztva',
+    selectedSize: 'összesített fájlméret',
+    size: 'összesített fájlméret',
+  },
+  manager: {
+    table: {
+      date: 'Dátum',
+      folder: 'Mappa',
+      name: 'Név',
+      size: 'Méret',
+      type: 'Típus',
+    },
+  },
+  modal: {
+    about: {
+      developer: 'Fejlesztő',
+      name: 'Laravel File Manager',
+      title: 'Termékinformáció',
+      version: 'Verzió',
+    },
+    delete: {
+      noSelected: 'Nincs elem kiválasztva!',
+      title: 'Törlés',
+    },
+    newFile: {
+      fieldName: 'Fájlnév',
+      fieldFeedback: 'A fájl létrehozva!',
+      title: 'Új fájl létrehozása',
+    },
+    newFolder: {
+      fieldName: 'Mappanév',
+      fieldFeedback: 'Mappa létrehozva!',
+      title: 'Új mappa létrehozása',
+    },
+    preview: {
+      title: 'Előnézet',
+    },
+    properties: {
+      disk: 'Meghajtó',
+      modified: 'Módosítva',
+      name: 'Név',
+      path: 'Útvonal',
+      size: 'Méret',
+      title: 'Tulajdonságok',
+      type: 'Típus',
+      url: 'URL',
+      access: 'Hozzáférés',
+      access_0: 'Hozzáférés megtagadva',
+      access_1: 'Csak olvasás',
+      access_2: 'Olvasás és írás',
+    },
+    rename: {
+      directoryExist: 'Könyvtár létrehozva',
+      fieldName: 'Új név megadása',
+      fieldFeedback: 'Érvénytelen név',
+      fileExist: 'Fájl létrehozva',
+      title: 'Átnevezés',
+    },
+    status: {
+      noErrors: 'Minden rendben!',
+      title: 'Állapot',
+    },
+    upload: {
+      ifExist: 'Ha a fájl létezik:',
+      noSelected: 'Nincs fájl kiválasztva!',
+      overwrite: 'Felülírás!',
+      selected: 'Kiválasztva:',
+      size: 'Méret:',
+      skip: 'Kihagyás',
+      title: 'Fájlok feltöltése',
+    },
+    editor: {
+      title: 'Szerkesztő',
+    },
+    audioPlayer: {
+      title: 'Zene lejátszó',
+    },
+    videoPlayer: {
+      title: 'Videó lejátszó',
+    },
+    zip: {
+      title: 'Archívum létrehozása',
+      fieldName: 'Archívum neve',
+      fieldFeedback: 'Archívum létrehozva!',
+    },
+    unzip: {
+      title: 'Archívum kicsomagolása',
+      fieldName: 'Mappa neve',
+      fieldRadioName: 'Kicsomagolás ide:',
+      fieldRadio1: 'Az aktuális mappába',
+      fieldRadio2: 'Új mappába',
+      fieldFeedback: 'Mappa létrehozva!',
+      warning: 'Figyelem! Ha a nevek megegyeznek, a fájlok felülíródnak!',
+    },
+    cropper: {
+      title: 'Vágás',
+      apply: 'Alkalmaz',
+      reset: 'Visszaállít',
+      save: 'Mentés',
+    },
+  },
+  notifications: {
+    cutToClipboard: 'Másolás a vágólapra!',
+    copyToClipboard: 'Átmásolva a vágólapra!',
+  },
+  response: {
+    noConfig: 'Konfiguráció nem található!',
+    notFound: 'Nincs találat!',
+    diskNotFound: 'A lemez nem található!',
+    pathNotFound: 'Az útvonal nem található!',
+    diskSelected: 'Lemez kiválasztva!',
+    // files
+    fileExist: 'A fájl már létezik!',
+    fileCreated: 'Fájl létrehozva!',
+    fileUpdated: 'Fájl frissítve!',
+    fileNotFound: 'A fájl nem található!',
+    // directories
+    dirExist: 'A könyvtár már létezik!',
+    dirCreated: 'Könyvtár létrehozva!',
+    dirNotFound: 'A könyvtár nem található',
+    // actions
+    uploaded: 'Minden fájl feltöltve!',
+    notAllUploaded: 'Néhány fájlt nem sikerült feltölteni!',
+    delNotFound: 'Néhány elem nem található!',
+    deleted: 'Törölve!',
+    renamed: 'Átnevezve!',
+    copied: 'Sikeres másolás!',
+    // zip
+    zipError: 'Hiva az archívum létrehozásakor!',
+    // acl
+    aclError: 'Hozzáférés megtagadva!',
+  },
+};
+
+export default hu;

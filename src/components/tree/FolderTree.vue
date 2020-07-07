@@ -1,19 +1,20 @@
 <template>
-    <div class="fm-tree">
-        <div class="fm-tree-disk sticky-top">
-            <i class="far fa-hdd"></i> {{ selectedDisk }}
-        </div>
-        <branch v-bind:parent-id="0"></branch>
+  <div class="fm-tree">
+    <div class="fm-tree-disk d-flex items-center sticky top-0 px-6 py-2 z-10">
+      <v-icon class="pr-4 opacity-75">mdi-server-network</v-icon>
+      <span>{{ selectedDisk }}</span>
     </div>
+    <branch class="pb-2" v-bind:parent-id="0"></branch>
+  </div>
 </template>
 
 <script>
-import Branch from './Branch.vue';
+import Branch from "./Branch.vue";
 
 export default {
-  name: 'FolderTree',
+  name: "FolderTree",
   components: {
-    branch: Branch,
+    branch: Branch
   },
   computed: {
     /**
@@ -21,30 +22,24 @@ export default {
      * @returns {*}
      */
     selectedDisk() {
-      return this.$store.getters['fm/selectedDisk'];
-    },
-  },
+      return this.$store.getters["fm/selectedDisk"];
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-    .fm-tree {
-        overflow: auto;
-        border-right: 1px solid #6d757d;
+.fm-tree {
+  overflow: auto;
+  /* border-right: 1px solid #6d757d; */
+  border-right: thin solid rgba(0, 0, 0, 0.12);
 
-        & > .fm-folders-tree {
-            padding-left: 0.2rem;
-        }
+  & > .fm-folders-tree {
+    padding-left: 0.2rem;
+  }
 
-        .fm-tree-disk {
-            padding: 0.2rem 0.3rem;
-            margin-bottom: 0.3rem;
-            background-color: white;
-        }
-
-        .fm-tree-disk > i {
-            padding-left: 0.2rem;
-            padding-right: 0.5rem;
-        }
-    }
+  .fm-tree-disk {
+    background-color: white;
+  }
+}
 </style>

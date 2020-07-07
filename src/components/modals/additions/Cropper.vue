@@ -1,131 +1,151 @@
 <template>
-    <div class="fm-additions-cropper">
-        <div class="row" v-bind:style="{'max-height': maxHeight+'px'}">
-            <div class="col-sm-9 cropper-block">
+    <v-container fluid class="fm-additions-cropper pa-0">
+        <v-row v-bind:style="{'max-height': maxHeight+'px'}">
+            <v-col cols="12" sm="9" class="cropper-block pa-0">
                 <img v-bind:src="imgSrc"
                      ref="fmCropper"
                      v-bind:alt="selectedItem.basename">
-            </div>
-            <div class="col-sm-3 pl-0">
-                <div class="cropper-preview"></div>
+            </v-col>
+            <v-col cols="12" sm="3" class="pl-0 pt-0">
+                <div class="cropper-preview mx-auto"></div>
                 <div class="cropper-data">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataX">X</label>
-                        </span>
-                        <input v-model.number="x" type="text" class="form-control" id="dataX">
-                        <span class="input-group-append">
-                            <span class="input-group-text">px</span>
-                        </span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataY">Y</label>
-                        </span>
-                        <input v-model.number="y" type="text" class="form-control" id="dataY">
-                        <span class="input-group-append">
-                            <span class="input-group-text">px</span>
-                        </span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataWidth">Width</label>
-                        </span>
-                        <input v-model.number="width" type="text" class="form-control" id="dataWidth">
-                        <span class="input-group-append">
-                            <span class="input-group-text">px</span>
-                        </span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataHeight">Height</label>
-                        </span>
-                        <input v-model.number="height" type="text" class="form-control" id="dataHeight">
-                        <span class="input-group-append">
-                            <span class="input-group-text">px</span>
-                        </span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataRotate">Rotate</label>
-                        </span>
-                        <input v-model.number="rotate" type="text" class="form-control" id="dataRotate">
-                        <span class="input-group-append">
-                            <span class="input-group-text">deg</span>
-                        </span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataScaleX">ScaleX</label>
-                        </span>
-                        <input v-model.number="scaleX" type="text" class="form-control" id="dataScaleX">
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-prepend">
-                          <label class="input-group-text" for="dataScaleY">ScaleY</label>
-                        </span>
-                        <input v-model.number="scaleY" type="text" class="form-control" id="dataScaleY">
-                    </div>
-                    <button v-on:click="setData()"
-                            v-bind:title="lang.modal.cropper.apply"
-                            type="button" class="btn btn-block btn-sm btn-info mb-2">
-                        <i class="fas fa-check"></i>
-                    </button>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="X koordináta"
+                      suffix="px"
+                      v-model.number="x"
+                      id="dataX"
+                    ></v-text-field>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="Y koordináta"
+                      suffix="px"
+                      v-model.number="y"
+                      id="dataY"
+                    ></v-text-field>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="Szélesség"
+                      suffix="px"
+                      v-model.number="width"
+                      id="dataWidth"
+                    ></v-text-field>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="Magasság"
+                      suffix="px"
+                      v-model.number="height"
+                      id="dataHeight"
+                    ></v-text-field>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="Forgatás"
+                      suffix="fok"
+                      v-model.number="rotate"
+                      id="dataRotate"
+                    ></v-text-field>
+
+                    <v-text-field
+                      outlined
+                      dense
+                      label="X tengely"
+                      suffix="×"
+                      v-model.number="scaleX"
+                      id="dataScaleX"
+                    ></v-text-field>
+                    
+                    <v-text-field
+                      outlined
+                      dense
+                      label="Y tengely"
+                      suffix="×"
+                      v-model.number="scaleY"
+                      id="dataScaleY"
+                    ></v-text-field>
+
+                    <v-btn depressed dark block color="secondary" v-on:click="setData()">
+                      {{ lang.modal.cropper.apply }}
+                    </v-btn>  
                 </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between">
-            <div>
-                <div class="btn-group mr-2" role="group" aria-label="Scale">
-                    <button v-on:click="cropMove(-10, 0)" class="btn btn-info">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <button v-on:click="cropMove(10, 0)" class="btn btn-info">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                    <button v-on:click="cropMove(0, -10)" class="btn btn-info">
-                        <i class="fas fa-arrow-up"></i>
-                    </button>
-                    <button v-on:click="cropMove(0, 10)" class="btn btn-info">
-                        <i class="fas fa-arrow-down"></i>
-                    </button>
-                </div>
-                <div class="btn-group mr-2" role="group" aria-label="Scale">
-                    <button v-on:click="cropScaleX()" class="btn btn-info">
-                        <i class="fas fa-arrows-alt-h"></i>
-                    </button>
-                    <button v-on:click="cropScaleY()" class="btn btn-info">
-                        <i class="fas fa-arrows-alt-v"></i>
-                    </button>
-                </div>
-                <div class="btn-group mr-2" role="group" aria-label="Rotate">
-                    <button v-on:click="cropRotate(-45)" class="btn btn-info">
-                        <i class="fas fa-undo"></i>
-                    </button>
-                    <button v-on:click="cropRotate(45)" class="btn btn-info">
-                        <i class="fas fa-redo"></i>
-                    </button>
-                </div>
-                <div class="btn-group mr-2" role="group" aria-label="Rotate">
-                    <button v-on:click="cropZoom(0.1)" class="btn btn-info">
-                        <i class="fas fa-search-plus"></i>
-                    </button>
-                    <button v-on:click="cropZoom(-0.1)" class="btn btn-info">
-                        <i class="fas fa-search-minus"></i>
-                    </button>
-                </div>
-                <button v-on:click="cropReset()" v-bind:title="lang.modal.cropper.reset" class="btn btn-info mr-2">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button v-on:click="cropSave()" v-bind:title="lang.modal.cropper.save" class="btn btn-danger mr-2">
-                    <i class="far fa-save"></i>
-                </button>
-            </div>
-            <span class="d-block">
-                <button v-on:click="$emit('closeCropper')" class="btn btn-light">{{ lang.btn.back }}</button>
-            </span>
-        </div>
-    </div>
+            </v-col>
+        </v-row>
+        <v-divider class="m-0"></v-divider>
+        <v-card-actions class="d-flex justify-content-between">
+          <v-btn-toggle dense class="mr-2" aria-label="Scale">
+            <v-btn v-on:click="cropMove(-10, 0)">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropMove(10, 0)">
+              <v-icon>mdi-arrow-right</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropMove(0, -10)">
+              <v-icon>mdi-arrow-up</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropMove(0, 10)">
+              <v-icon>mdi-arrow-down</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+
+          <v-btn-toggle dense class="mr-2" aria-label="Scale">
+            <v-btn v-on:click="cropScaleX()">
+              <v-icon>mdi-arrow-left-right</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropScaleY()">
+              <v-icon>mdi-arrow-up-down</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+
+          <v-btn-toggle dense class="mr-2" aria-label="Rotate">
+            <v-btn v-on:click="cropRotate(-45)">
+              <v-icon>mdi-undo</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropRotate(45)">
+              <v-icon>mdi-redo</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+
+          <v-btn-toggle dense class="mr-2" aria-label="Rotate">
+            <v-btn v-on:click="cropZoom(0.1)">
+              <v-icon>mdi-magnify-plus-outline</v-icon>
+            </v-btn>
+            <v-btn v-on:click="cropZoom(-0.1)">
+              <v-icon>mdi-magnify-minus-outline</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+
+            <v-tooltip top attach=".v-card__actions">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn-toggle dense class="mr-2">
+                      <v-btn 
+                      v-on:click="cropReset()"
+                      v-bind="attrs"
+                      v-on="on"
+                      >
+                        <v-icon>mdi-refresh</v-icon>
+                      </v-btn>
+                </v-btn-toggle>
+              </template>
+              <span>{{ lang.modal.cropper.reset }}</span>
+            </v-tooltip>
+          <v-spacer></v-spacer>
+          <v-btn depressed dark color="secondary" v-on:click="cropSave()">
+            {{ lang.modal.cropper.save }}
+          </v-btn>
+            <v-btn text v-on:click="$emit('closeCropper')">
+              {{ lang.btn.back }}
+            </v-btn>
+        </v-card-actions>
+    </v-container>
 </template>
 
 <script>

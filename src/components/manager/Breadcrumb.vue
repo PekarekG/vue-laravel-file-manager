@@ -1,30 +1,32 @@
 <template>
-    <div class="fm-breadcrumb">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb"
-                v-bind:class="[manager === activeManager ? 'active-manager' : 'bg-light']">
-                <li class="breadcrumb-item" v-on:click="selectMainDirectory">
-                    <span class="badge badge-secondary">
-                        <i class="far fa-hdd"></i>
-                    </span>
-                </li>
-                <li class="breadcrumb-item text-truncate"
-                    v-for="(item, index) in breadcrumb"
-                    v-bind:key="index"
-                    v-bind:class="[breadcrumb.length === index + 1 ? 'active' : '']"
-                    v-on:click="selectDirectory(index)">
-                    <span>{{ item }}</span>
-                </li>
-            </ol>
-        </nav>
-    </div>
+  <v-breadcrumbs class="fm-breadcrumb px-4 pt-0 pb-4">
+    <v-breadcrumbs-item class="cursor-pointer" v-on:click="selectMainDirectory">
+      <v-icon class="opacity-75 pr-1">mdi-server-network</v-icon>
+      <span
+        class="hover:underline"
+        v-for="(disk, index) in disks"
+        v-bind:key="index"
+        >{{ disk }}</span
+      >
+    </v-breadcrumbs-item>
+    <v-breadcrumbs-item
+      class="cursor-pointer"
+      v-for="(item, index) in breadcrumb"
+      v-bind:key="index"
+      v-bind:class="[breadcrumb.length === index + 1 ? 'active' : '']"
+      v-on:click="selectDirectory(index)"
+    >
+      <v-icon class="pr-3">mdi-chevron-right</v-icon>
+      <span class="hover:underline">{{ item }}</span>
+    </v-breadcrumbs-item>
+  </v-breadcrumbs>
 </template>
 
 <script>
 export default {
-  name: 'Breadcrumb',
+  name: "Breadcrumb",
   props: {
-    manager: { type: String, required: true },
+    manager: { type: String, required: true }
   },
   computed: {
     /**
@@ -58,6 +60,22 @@ export default {
     breadcrumb() {
       return this.$store.getters[`fm/${this.manager}/breadcrumb`];
     },
+
+    /**
+     * Disk list
+     * @returns {Array}
+     */
+    disks() {
+      return this.$store.getters["fm/diskList"];
+    },
+
+    /**
+     * Selected Disk for this manager
+     * @returns {default.computed.selectedDisk|(function())|default.selectedDisk|null}
+     */
+    selectedDisk() {
+      return this.$store.state.fm[this.manager].selectedDisk;
+    }
   },
   methods: {
     /**
@@ -65,12 +83,15 @@ export default {
      * @param index
      */
     selectDirectory(index) {
-      const path = this.breadcrumb.slice(0, index + 1).join('/');
+      const path = this.breadcrumb.slice(0, index + 1).join("/");
 
       // only if this path not selected
       if (path !== this.selectedDirectory) {
         // load directory
-        this.$store.dispatch(`fm/${this.manager}/selectDirectory`, { path, history: true });
+        this.$store.dispatch(`fm/${this.manager}/selectDirectory`, {
+          path,
+          history: true
+        });
       }
     },
 
@@ -79,30 +100,27 @@ export default {
      */
     selectMainDirectory() {
       if (this.selectedDirectory) {
-        this.$store.dispatch(`fm/${this.manager}/selectDirectory`, { path: null, history: true });
+        this.$store.dispatch(`fm/${this.manager}/selectDirectory`, {
+          path: null,
+          history: true
+        });
       }
     },
-  },
+
+    /**
+     * Select disk
+     * @param disk
+     */
+    selectDisk(disk) {
+      if (this.selectedDisk !== disk) {
+        this.$store.dispatch("fm/selectDisk", {
+          disk,
+          manager: this.manager
+        });
+      }
+    }
+  }
 };
 </script>
 
-<style lang="scss">
-    .fm-breadcrumb {
-
-        .breadcrumb {
-            flex-wrap: nowrap;
-            padding: 0.2rem 0.3rem;
-            margin-bottom: 0.5rem;
-
-            &.active-manager {
-                background-color: #c2e5eb;
-            }
-
-            .breadcrumb-item:not(.active):hover {
-                cursor: pointer;
-                font-weight: normal;
-                color: #6d757d;
-            }
-        }
-    }
-</style>
+<style lang="scss"></style>

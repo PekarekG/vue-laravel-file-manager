@@ -5,7 +5,7 @@ import Vuex from 'vuex';
 // store
 import fm from './store';
 
-// App
+// App 
 import App from './FileManager.vue';
 
 import vuetify from './plugins/vuetify';
