@@ -1,5 +1,9 @@
 <template>
-  <div class="fm-content d-flex flex-column">
+  <overlay-scrollbars
+    class="fm-content d-flex flex-column"
+    :options="{ scrollbars: { autoHide: 'leave' } }"
+  >
+    <!-- <disk-list v-bind:manager="manager"></disk-list> -->
     <breadcrumb v-bind:manager="manager"></breadcrumb>
     <div class="fm-content-body">
       <table-view
@@ -8,11 +12,12 @@
       ></table-view>
       <grid-view v-else v-bind:manager="manager"></grid-view>
     </div>
-  </div>
+  </overlay-scrollbars>
 </template>
 
 <script>
 // Components
+import DiskList from "./DiskList.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import TableView from "./TableView.vue";
 import GridView from "./GridView.vue";
@@ -20,6 +25,7 @@ import GridView from "./GridView.vue";
 export default {
   name: "Manager",
   components: {
+    DiskList,
     Breadcrumb,
     TableView,
     GridView

@@ -4,45 +4,79 @@
       <template>
         <thead>
           <tr>
-            <th class="text-left w-50 cursor-pointer" v-on:click="sortBy('name')">
+            <th
+              class="text-left w-50 cursor-pointer"
+              v-on:click="sortBy('name')"
+            >
               <div class="d-flex items-center">
                 <span class="text-sm">{{ lang.manager.table.name }}</span>
                 <template v-if="sortSettings.field === 'name'">
-                  <v-icon small v-show="sortSettings.direction === 'down'">mdi-arrow-down</v-icon>
-                  <v-icon small v-show="sortSettings.direction === 'up'">mdi-arrow-up</v-icon>
+                  <v-icon small v-show="sortSettings.direction === 'down'"
+                    >mdi-arrow-down</v-icon
+                  >
+                  <v-icon small v-show="sortSettings.direction === 'up'"
+                    >mdi-arrow-up</v-icon
+                  >
                 </template>
               </div>
             </th>
-            <th class="text-left w-15 cursor-pointer" v-on:click="sortBy('type')">
+            <th
+              class="text-left w-15 cursor-pointer"
+              v-on:click="sortBy('type')"
+            >
               <div class="d-flex items-center">
                 <span class="text-sm">{{ lang.manager.table.type }}</span>
                 <template v-if="sortSettings.field === 'type'">
-                  <v-icon small v-show="sortSettings.direction === 'down'">mdi-arrow-down</v-icon>
-                  <v-icon small v-show="sortSettings.direction === 'up'">mdi-arrow-up</v-icon>
+                  <v-icon small v-show="sortSettings.direction === 'down'"
+                    >mdi-arrow-down</v-icon
+                  >
+                  <v-icon small v-show="sortSettings.direction === 'up'"
+                    >mdi-arrow-up</v-icon
+                  >
                 </template>
               </div>
             </th>
-            <th class="text-left w-20 cursor-pointer" v-on:click="sortBy('date')">
+            <th
+              class="text-left w-20 cursor-pointer"
+              v-on:click="sortBy('date')"
+            >
               <div class="d-flex items-center">
                 <span class="text-sm">{{ lang.manager.table.date }}</span>
                 <template v-if="sortSettings.field === 'date'">
-                  <v-icon small v-show="sortSettings.direction === 'down'">mdi-arrow-down</v-icon>
-                  <v-icon small v-show="sortSettings.direction === 'up'">mdi-arrow-up</v-icon>
+                  <v-icon small v-show="sortSettings.direction === 'down'"
+                    >mdi-arrow-down</v-icon
+                  >
+                  <v-icon small v-show="sortSettings.direction === 'up'"
+                    >mdi-arrow-up</v-icon
+                  >
                 </template>
               </div>
             </th>
-            <th class="text-left w-15 cursor-pointer" v-on:click="sortBy('size')">
+            <th
+              class="text-left w-15 cursor-pointer"
+              v-on:click="sortBy('size')"
+            >
               <div class="d-flex items-center">
                 <span class="text-sm">{{ lang.manager.table.size }}</span>
                 <template v-if="sortSettings.field === 'size'">
-                  <v-icon small v-show="sortSettings.direction === 'down'">mdi-arrow-down</v-icon>
-                  <v-icon small v-show="sortSettings.direction === 'up'">mdi-arrow-up</v-icon>
+                  <v-icon small v-show="sortSettings.direction === 'down'"
+                    >mdi-arrow-down</v-icon
+                  >
+                  <v-icon small v-show="sortSettings.direction === 'up'"
+                    >mdi-arrow-up</v-icon
+                  >
                 </template>
               </div>
             </th>
           </tr>
         </thead>
-        <tbody>
+        <draggable
+          tag="tbody"
+          :sort="false"
+          forceFallback="true"
+          @start="drag = true"
+          @end="drag = false"
+        >
           <tr v-if="!isRootPath" class="cursor-pointer">
             <td v-on:click="levelUp">
               <div class="d-flex items-center">
@@ -75,11 +109,11 @@
                     v-on:dblclick="selectDirectory(directory.path)"
                   >
                     <div class="d-flex items-center">
-                      <v-icon class="mr-4 cursor-pointer">mdi-folder-outline</v-icon>
+                      <v-icon class="mr-4 cursor-pointer"
+                        >mdi-folder-outline</v-icon
+                      >
                       <span class="cursor-pointer hover:underline">
-                        {{
-                        directory.basename
-                        }}
+                        {{ directory.basename }}
                       </span>
                     </div>
                   </td>
@@ -126,14 +160,10 @@
                   >
                     <div class="d-flex items-center">
                       <v-icon class="mr-4">
-                        {{
-                        extensionToIcon(file.extension)
-                        }}
+                        {{ extensionToIcon(file.extension) }}
                       </v-icon>
                       <span class="hover:underline">
-                        {{
-                        file.filename ? file.filename : file.basename
-                        }}
+                        {{ file.filename ? file.filename : file.basename }}
                       </span>
                     </div>
                   </td>
@@ -162,7 +192,7 @@
               </table>
             </v-lazy>
           </tr>
-        </tbody>
+        </draggable>
       </template>
     </v-simple-table>
   </div>
@@ -172,9 +202,13 @@
 import translate from "./../../mixins/translate";
 import helper from "./../../mixins/helper";
 import managerHelper from "./mixins/manager";
+import draggable from "vuedraggable";
 
 export default {
   name: "table-view",
+  components: {
+    draggable
+  },
   mixins: [translate, helper, managerHelper],
   props: {
     manager: { type: String, required: true }
@@ -205,29 +239,6 @@ export default {
 
 <style lang="scss">
 .fm-table {
-  /* thead th{
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            cursor: pointer;
-            border-top: none;
-
-            &:hover {
-                background-color: #f8f9fa;
-            }
-
-            & > i {
-                padding-left: 0.5rem;
-            }
-        } */
-
-  /* td {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        } */
-
   tbody tr {
     height: 3.5rem;
   }
@@ -252,13 +263,28 @@ export default {
     width: 50%;
   }
 
-  /* .fm-content-item {
-            cursor: pointer;
-            max-width: 1px;
-        } */
-
   .text-hidden {
     color: #cdcdcd;
+  }
+
+  .sortable-ghost {
+    background-color: red;
+    opacity: 1;
+  }
+  .sortable-chosen {
+    background-color: #f4f6fa;
+    opacity: 1;
+  }
+  .sortable-drag {
+    background-color: #fff;
+    opacity: 1 !important;
+    width: auto !important;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    transform: scale(1.02);
+    transform-origin: 15% 40%;
+    width: auto;
   }
 }
 </style>

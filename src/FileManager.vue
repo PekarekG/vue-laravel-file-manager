@@ -3,6 +3,15 @@
     class="fm d-flex flex-column"
     v-bind:class="{ 'fm-full-screen': fullScreen }"
   >
+    <v-progress-linear
+      absolute
+      top
+      indeterminate
+      background-color="#f4f6fa"
+      color="secondary"
+      v-show="loadingSpinner"
+      class="fm-loading-spinner"
+    ></v-progress-linear>
     <info-block></info-block>
     <navbar></navbar>
     <modal v-if="showModal"></modal>
@@ -117,7 +126,15 @@ export default {
       activeManager: state => state.settings.activeManager,
       showModal: state => state.modal.showModal,
       fullScreen: state => state.settings.fullScreen
-    })
+    }),
+
+    /**
+     * Spinner
+     * @returns {number}
+     */
+    loadingSpinner() {
+      return this.$store.state.fm.messages.loading;
+    }
   },
   methods: {
     /**
@@ -311,6 +328,12 @@ export default {
     -ms-user-select: none;
     user-select: none;
   }
+}
+
+.fm-loading-spinner {
+  top: -4rem !important;
+  z-index: 10;
+  border-radius: 0 !important;
 }
 
 .fm-error {

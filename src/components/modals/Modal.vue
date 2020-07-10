@@ -114,10 +114,10 @@ export default {
   }
 
   .modal-xl {
-    max-width: 96%;
-  }
-  .v-card__text {
-    height: 600px;
+    max-width: 90%;
+    .v-card__text {
+      height: 600px;
+    }
   }
 }
 

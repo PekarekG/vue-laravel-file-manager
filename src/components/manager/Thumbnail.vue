@@ -1,34 +1,28 @@
 <template>
-  <v-lazy
-    :options="{
-      threshold: 0.5
-    }"
-    height="160"
-    transition="fade-transition"
+  <v-icon class="fm-item-icon d-flex self-center inset-0 h-full" v-if="!src"
+    >mdi-file-image-outline</v-icon
   >
-    <v-icon class="fm-item-icon d-flex self-center h-full" v-if="!src"
-      >mdi-file-image-outline</v-icon
-    >
-    <v-img
+  <!-- <v-img
       v-else
       v-bind:src="src"
       v-bind:alt="file.filename"
-      height="160"
-      width="100%"
+      min-height="80"
+      min-width="80"
+      max-height="160"
+      max-width="160"
     >
       <template v-slot:placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular indeterminate color="grey"></v-progress-circular>
         </v-row>
       </template>
-    </v-img>
-    <!-- <img
-      v-else
-      v-bind:src="src"
-      v-bind:alt="file.filename"
-      class="img-thumbnail"
-    /> -->
-  </v-lazy>
+    </v-img> -->
+  <img
+    v-else
+    v-bind:src="src"
+    v-bind:alt="file.filename"
+    class="img-thumbnail absolute inset-0 m-auto h-auto"
+  />
 </template>
 
 <script>
@@ -93,7 +87,7 @@ export default {
     loadImage() {
       // if authorization required
       if (this.auth) {
-        GET.thumbnail(this.disk, this.file.path).then(response => {
+        GET.preview(this.disk, this.file.path).then(response => {
           const mimeType = response.headers["content-type"].toLowerCase();
           const imgBase64 = Buffer.from(response.data, "binary").toString(
             "base64"
@@ -102,15 +96,19 @@ export default {
           this.src = `data:${mimeType};base64,${imgBase64}`;
         });
       } else {
-        this.src = `${
-          this.$store.getters["fm/settings/baseUrl"]
-        }thumbnails?disk=${this.disk}&path=${encodeURIComponent(
-          this.file.path
-        )}&v=${this.file.timestamp}`;
+        this.src = `${this.$store.getters["fm/settings/baseUrl"]}preview?disk=${
+          this.disk
+        }&path=${encodeURIComponent(this.file.path)}&v=${this.file.timestamp}`;
       }
     }
   }
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.fm-grid {
+  .fm-item-icon {
+    position: absolute;
+  }
+}
+</style>

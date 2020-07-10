@@ -1,20 +1,13 @@
 <template>
   <v-container fluid class="fm-info-block px-4 py-0 mb-2">
     <!-- Progress Bar -->
-    <v-progress-linear
+    <!-- <v-progress-linear
       absolute
       top
       color="secondary"
       v-show="progressBar"
       v-bind:value="progressBar"
-    ></v-progress-linear>
-    <v-progress-linear
-      absolute
-      top
-      indeterminate
-      color="secondary"
-      v-show="loadingSpinner"
-    ></v-progress-linear>
+    ></v-progress-linear> -->
     <v-row>
       <v-col cols="auto" class="d-flex items-center h-14">
         <span class="text-xl leading-none" v-show="selectedCount">

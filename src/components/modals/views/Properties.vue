@@ -130,7 +130,7 @@
             <v-btn
               icon
               small
-              v-on:click="copyToClipboard(bytesToHuman(selectedItem.size))"
+              v-on:click="copyToClipboard(url)"
               v-bind:title="lang.clipboard.copy"
             >
               <v-icon small color="grey lighten-1">mdi-content-copy</v-icon>

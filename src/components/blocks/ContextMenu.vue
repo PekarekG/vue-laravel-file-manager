@@ -152,6 +152,10 @@ export default {
       this.closeMenu();
     },
 
+    /**
+     * Close context menu click outside
+     * @param name
+     */
     onClickOutside() {
       this.menuVisible = false;
     }

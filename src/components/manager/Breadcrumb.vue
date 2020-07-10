@@ -2,12 +2,7 @@
   <v-breadcrumbs class="fm-breadcrumb px-4 pt-0 pb-4">
     <v-breadcrumbs-item class="cursor-pointer" v-on:click="selectMainDirectory">
       <v-icon class="opacity-75 pr-1">mdi-server-network</v-icon>
-      <span
-        class="hover:underline"
-        v-for="(disk, index) in disks"
-        v-bind:key="index"
-        >{{ disk }}</span
-      >
+      <span class="hover:underline">{{ selectedDisk }}</span>
     </v-breadcrumbs-item>
     <v-breadcrumbs-item
       class="cursor-pointer"

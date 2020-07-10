@@ -4,6 +4,7 @@
       class="item-group"
       v-for="(directory, index) in subDirectories"
       v-bind:key="index"
+      @click=""
     >
       <v-lazy
         :options="{

@@ -14,7 +14,16 @@
         <v-col cols="12">
           <h2 class="subtitle-2 mb-0">Mappák</h2>
         </v-col>
+      </v-row>
 
+      <draggable
+        class="row pb-4"
+        v-if="directories.length >= 1"
+        forceFallback="true"
+        :sort="false"
+        @start="drag = true"
+        @end="drag = false"
+      >
         <v-col
           cols="12"
           sm="6"
@@ -57,67 +66,74 @@
             </v-card>
           </v-lazy>
         </v-col>
-      </v-row>
+      </draggable>
 
       <v-row class="pb-4" v-if="files.length >= 1">
         <v-col cols="12">
           <h2 class="subtitle-2 mb-0">Fájlok</h2>
         </v-col>
+      </v-row>
 
-        <v-col
-          class="d-flex child-flex"
-          cols="2"
-          sm="2"
-          md="2"
-          xl="1"
-          v-for="(file, index) in files"
-          v-bind:key="`f-${index}`"
-        >
-          <v-lazy :options="{ threshold: 0.5 }" transition="fade-transition">
-            <v-card
-              class="fm-grid-item unselectable h-full rounded-lg overflow-hidden"
-              v-bind:title="file.basename"
-              v-bind:class="{ active: checkSelect('files', file.path) }"
-              v-on:click="selectItem('files', file.path, $event)"
-              v-on:dblclick="selectAction(file.path, file.extension)"
-              v-on:contextmenu.prevent="contextMenu(file, $event)"
-              outlined
-            >
-              <div class="text-center h-full">
-                <v-icon
-                  class="fm-item-icon d-flex self-center h-full"
-                  v-if="acl && file.acl === 0"
-                  >mdi-lock-open-outline</v-icon
+      <draggable
+        class="row pb-4"
+        v-if="files.length >= 1"
+        :sort="false"
+        @start="drag = true"
+        @end="drag = false"
+      >
+        <div class="image-grid-container px-3 w-full">
+          <div v-for="(file, index) in files" v-bind:key="`f-${index}`">
+            <v-lazy :options="{ threshold: 0.5 }" transition="fade-transition">
+              <v-card
+                class="fm-grid-item unselectable h-full rounded-lg overflow-hidden"
+                v-bind:title="file.basename"
+                v-bind:class="{ active: checkSelect('files', file.path) }"
+                v-on:click="selectItem('files', file.path, $event)"
+                v-on:dblclick="selectAction(file.path, file.extension)"
+                v-on:contextmenu.prevent="contextMenu(file, $event)"
+                outlined
+              >
+                <div
+                  class="text-center h-full relative"
+                  style="padding-bottom: 100%;"
                 >
-                <thumbnail
-                  v-else-if="thisImage(file.extension)"
-                  v-bind:disk="disk"
-                  v-bind:file="file"
-                >
-                </thumbnail>
-                <v-icon class="fm-item-icon d-flex self-center h-full" v-else>{{
-                  extensionToIcon(file.extension)
-                }}</v-icon>
-              </div>
-              <!-- <v-list-item>
-                <v-list-item-avatar>
-                  <v-icon v-if="acl && file.acl === 0"
+                  <v-icon
+                    class="fm-item-icon d-flex self-center h-full inset-0"
+                    v-if="acl && file.acl === 0"
                     >mdi-lock-open-outline</v-icon
                   >
-                  <v-icon v-else>{{ extensionToIcon(file.extension) }}</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content class="fm-item-info">
-                  <v-list-item-title class="subtitle-1">{{
-                    `${file.filename}.${file.extension}`
-                  }}</v-list-item-title>
-                  <v-list-item-subtitle class="subtitle-2">{{
-                    bytesToHuman(file.size)
-                  }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item> -->
-            </v-card>
-          </v-lazy>
-        </v-col>
+                  <thumbnail
+                    v-else-if="thisImage(file.extension)"
+                    v-bind:disk="disk"
+                    v-bind:file="file"
+                  >
+                  </thumbnail>
+                  <v-icon
+                    class="fm-item-icon d-flex self-center h-full inset-0"
+                    v-else
+                    >{{ extensionToIcon(file.extension) }}</v-icon
+                  >
+                </div>
+                <!-- <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon v-if="acl && file.acl === 0"
+                      >mdi-lock-open-outline</v-icon
+                    >
+                    <v-icon v-else>{{ extensionToIcon(file.extension) }}</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content class="fm-item-info">
+                    <v-list-item-title class="subtitle-1">{{
+                      `${file.filename}.${file.extension}`
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle class="subtitle-2">{{
+                      bytesToHuman(file.size)
+                    }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item> -->
+              </v-card>
+            </v-lazy>
+          </div>
+        </div>
 
         <!-- <v-col
           class="d-flex child-flex"
@@ -154,7 +170,7 @@
             </v-card>
           </v-lazy>
         </v-col> -->
-      </v-row>
+      </draggable>
     </v-container>
   </div>
 </template>
@@ -164,10 +180,11 @@ import translate from "./../../mixins/translate";
 import helper from "./../../mixins/helper";
 import managerHelper from "./mixins/manager";
 import Thumbnail from "./Thumbnail.vue";
+import draggable from "vuedraggable";
 
 export default {
   name: "grid-view",
-  components: { Thumbnail },
+  components: { Thumbnail, draggable },
   mixins: [translate, helper, managerHelper],
   data() {
     return {
@@ -228,5 +245,14 @@ export default {
       background-color: #f4f6fa;
     }
   }
+  .sortable-drag {
+    opacity: 1 !important;
+  }
+}
+.image-grid-container {
+  display: grid;
+  grid-gap: 1.5rem;
+  //grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 }
 </style>
