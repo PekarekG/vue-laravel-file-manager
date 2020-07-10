@@ -1,28 +1,30 @@
 <template>
-  <v-icon class="fm-item-icon d-flex self-center inset-0 h-full" v-if="!src"
-    >mdi-file-image-outline</v-icon
-  >
-  <!-- <v-img
+  <div>
+    <v-icon class="fm-item-icon d-flex self-center inset-0 h-full" v-if="!src"
+      >mdi-file-image-outline</v-icon
+    >
+    <!-- <v-img
+        v-else
+        v-bind:src="src"
+        v-bind:alt="file.filename"
+        min-height="80"
+        min-width="80"
+        max-height="160"
+        max-width="160"
+      >
+        <template v-slot:placeholder>
+          <v-row class="fill-height ma-0" align="center" justify="center">
+            <v-progress-circular indeterminate color="grey"></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img> -->
+    <img
       v-else
       v-bind:src="src"
       v-bind:alt="file.filename"
-      min-height="80"
-      min-width="80"
-      max-height="160"
-      max-width="160"
-    >
-      <template v-slot:placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="grey"></v-progress-circular>
-        </v-row>
-      </template>
-    </v-img> -->
-  <img
-    v-else
-    v-bind:src="src"
-    v-bind:alt="file.filename"
-    class="img-thumbnail absolute inset-0 m-auto h-auto"
-  />
+      class="img-thumbnail absolute inset-0 m-auto h-full object-cover"
+    />
+  </div>
 </template>
 
 <script>
